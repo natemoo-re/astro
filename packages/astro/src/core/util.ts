@@ -1,6 +1,5 @@
-import type { AstroConfig } from '../@types/astro-core';
-import type { ErrorPayload } from 'vite';
-import fs from 'fs';
+import type { AstroConfig } from '../@types/astro';
+import type { ErrorPayload } from './vite';
 import path from 'path';
 import { fileURLToPath, pathToFileURL } from 'url';
 import resolve from 'resolve';
