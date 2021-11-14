@@ -1,5 +1,6 @@
 {
   "name": "@example/minimal",
+  "template": "astro-template-minimal",
   "version": "0.0.1",
   "private": true,
   "scripts": {
