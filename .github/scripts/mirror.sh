@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# Adapted from https://github.com/gatsbyjs/gatsby/blob/8933ca9b3bf2c9b4fd580dd437d8695c3be705b7/scripts/clone-and-validate.sh
+# and https://github.com/johno/actions-push-subdirectories/blob/d606e766b88fc02b39a35a6723a40b5fd54d7f23/entrypoint.sh
 set -e
 
 FOLDER=$1
@@ -33,7 +35,6 @@ for folder in $FOLDER/*; do
   cd $CLONE_DIR
   find . | grep -v ".git" | grep -v "^\.*$" | xargs rm -rf # delete all files (to handle deletions in monorepo)
   cp -r $BASE/$folder/. .
-
 
   # Commit if there is anything to
   if [ -n "$(git status --porcelain)" ]; then

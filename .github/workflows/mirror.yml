@@ -5,15 +5,11 @@ on:
     branches:
       - main
       - latest
-    tags:
-      - '*'
-
-env:
-  API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
-  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
   mirror:
+    name: "mirror:examples"
+    if: github.repository == 'natemoo-re/astro'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
