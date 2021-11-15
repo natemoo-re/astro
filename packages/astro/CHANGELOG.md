@@ -1,5 +1,12 @@
 # astro
 
+## 0.21.0-next.4
+
+### Patch Changes
+
+- b958088c: Make astro-root be a display: contents element
+- 65d17857: Fixes hoisted scripts to be bundled during the build
+
 ## 0.21.0-next.3
 
 ### Patch Changes
