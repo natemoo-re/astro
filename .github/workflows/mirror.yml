@@ -17,7 +17,8 @@ jobs:
     steps:
       - uses: actions/checkout@master
       - name: mirror examples
-        run: "${GITHUB_WORKSPACE}/.github/scripts/mirror.sh" examples
+        run: |
+          "${GITHUB_WORKSPACE}/.github/scripts/mirror.sh" examples
         env:
           API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
