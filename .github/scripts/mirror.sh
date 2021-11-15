@@ -5,7 +5,7 @@ set -e
 FOLDER=$1
 GITHUB_USERNAME="natemoo-re"
 DEST_ORG="natemoo-re"
-STARTER_NAME="${3:-name}"
+STARTER_NAME="${3:-template}"
 BRANCH_NAME="${4:-main}"
 BASE=$(pwd)
 
