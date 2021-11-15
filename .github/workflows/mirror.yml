@@ -12,12 +12,12 @@ env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
-  main:
+  mirror:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
-      - name: publish:starters
-        uses: johno/actions-push-subdirectories@master
+      - name: mirror examples
+        runs: ../scripts/mirror.sh examples
         env:
           API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
