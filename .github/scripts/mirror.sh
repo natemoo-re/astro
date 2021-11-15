@@ -3,10 +3,10 @@
 set -e
 
 FOLDER=$1
+BRANCH_NAME="${2:-main}"
 GITHUB_USERNAME="natemoo-re"
 DEST_ORG="natemoo-re"
 STARTER_NAME="${3:-template}"
-BRANCH_NAME="${4:-main}"
 BASE=$(pwd)
 
 git config --global user.email "actions@github.com"
@@ -24,7 +24,6 @@ for folder in $FOLDER/*; do
 
   NAME=$(cat $folder/package.json | jq --arg name "$STARTER_NAME" -r '.[$name]')
   echo "  Name: $NAME"
-  IS_WORKSPACE=$(cat $folder/package.json | jq -r '.workspaces')
   CLONE_DIR="__${NAME}__clone__"
   echo "  Clone dir: $CLONE_DIR"
 
