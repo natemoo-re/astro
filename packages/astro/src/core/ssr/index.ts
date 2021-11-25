@@ -23,6 +23,7 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { renderPage, renderSlot } from '../../runtime/server/index.js';
+import { h } from '../../runtime/jsx/index.js';
 import { canonicalURL as getCanonicalURL, codeFrame, resolveDependency, viteifyURL } from '../util.js';
 import { getStylesForURL } from './css.js';
 import { injectTags } from './html.js';
@@ -175,7 +176,6 @@ export async function render(renderers: Renderer[], mod: ComponentInstance, ssrO
   // Validate the page component before rendering the page
   const Component = await mod.default;
   if (!Component) throw new Error(`Expected an exported Astro component but received typeof ${typeof Component}`);
-  if (!Component.isAstroComponentFactory) throw new Error(`Unable to SSR non-Astro component (${route?.component})`);
 
   // Create the result object that will be passed into the render function.
   // This object starts here as an empty shell (not yet the result) but then
@@ -223,7 +223,14 @@ export async function render(renderers: Renderer[], mod: ComponentInstance, ssrO
     },
   };
 
-  let html = await renderPage(result, Component, pageProps, null);
+  let html: string;
+  if (['.astro', '.md'].includes(path.extname(filePath.pathname))) {
+    html = await renderPage(result, Component, pageProps, null);
+  } else {
+    // const { bindResult } = await import('../../runtime/jsx/index.js');
+    // bindResult(result);
+    html = await h(Component, pageProps);
+  }
 
   // inject <!doctype html> if missing (TODO: is a more robust check needed for comments, etc.?)
   if (!/<!doctype html/i.test(html)) {

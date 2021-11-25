@@ -4,6 +4,7 @@ import type { AstroConfig, Renderer } from '../@types/astro';
 import type { LogOptions } from '../core/logger';
 
 import babel from '@babel/core';
+// import babelPluginAstroJsx from './babel-plugin-astro-jsx.js';
 import esbuild from 'esbuild';
 import * as colors from 'kleur/colors';
 import * as eslexer from 'es-module-lexer';
@@ -15,6 +16,7 @@ const JSX_RENDERER_CACHE = new WeakMap<AstroConfig, Map<string, Renderer>>();
 const JSX_EXTENSIONS = new Set(['.jsx', '.tsx']);
 const IMPORT_STATEMENTS: Record<string, string> = {
   react: "import React from 'react'",
+  astro: "import { h } from 'astro'",
   preact: "import { h } from 'preact'",
   'solid-js': "import 'solid-js/web'",
 };

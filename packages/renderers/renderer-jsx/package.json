@@ -1,0 +1,25 @@
+{
+  "name": "@astrojs/renderer-jsx",
+  "description": "Use JSX for Astro Component",
+  "version": "0.0.1",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/withastro/astro.git",
+    "directory": "packages/renderers/renderer-astrojsx"
+  },
+  "type": "module",
+  "exports": {
+    ".": "./index.js",
+    "./*": "./*",
+    "./compat": "./compat/index.js",
+    "./client.js": "./client.js",
+    "./server.js": "./server.js",
+    "./package.json": "./package.json"
+  },
+  "dependencies": {
+    "@babel/plugin-transform-react-jsx": "^7.16.0"
+  },
+  "engines": {
+    "node": "^12.20.0 || ^14.13.1 || >=16.0.0"
+  }
+}

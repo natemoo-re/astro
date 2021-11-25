@@ -14,7 +14,7 @@ export type { Metadata } from './metadata';
 // INVESTIGATE: Can we have more specific types both for the argument and output?
 // If these are intentional, add comments that these are intention and why.
 // Or maybe type UserValue = any; ?
-async function _render(child: any): Promise<any> {
+export async function _render(child: any): Promise<any> {
   child = await child;
   if (Array.isArray(child)) {
     return (await Promise.all(child.map((value) => _render(value)))).join('');
@@ -216,7 +216,13 @@ If you're still stuck, please open an issue on GitHub or join us at https://astr
     if (metadata.hydrate === 'only') {
       html = await renderSlot(result, slots?.fallback);
     } else {
-      ({ html } = await renderer.ssr.renderToStaticMarkup(Component, props, children));
+      if (renderer.name === '@astrojs/renderer-jsx') {
+        const { bindResult } = await import('../jsx/index.js');
+        bindResult(result._metadata.renderers);
+        ({ html } = await renderer.ssr.renderToStaticMarkup(Component, props, children));
+      } else {
+        ({ html } = await renderer.ssr.renderToStaticMarkup(Component, props, children));
+      }
     }
   }
 
