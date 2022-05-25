@@ -22,7 +22,7 @@ async function bundle(files) {
 		minify: true,
 		sourcemap: true,
 		target: ['chrome58', 'firefox57', 'safari11', 'edge16'],
-		outfile: '<stdout>',
+		outdir: '.tmp/',
 		metafile: true,
 	})
 
