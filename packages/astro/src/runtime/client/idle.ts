@@ -1,6 +1,6 @@
 import type { GetHydrateCallback, HydrateOptions } from '../../@types/astro';
 
-console.log("Testing")
+console.log("Testing!")
 
 /**
  * Hydrate this component as soon as the main thread is free
