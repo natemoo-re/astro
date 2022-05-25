@@ -18,13 +18,21 @@ export default async function checkBundleSize({ github, context, exec }) {
 		table.push(`| ${filename.slice('.tmp/'.length)} | ${info.bytes} |`);
 	}
 
-	console.log(table.join('\n'));
-
-	const { data: comments } = await github.rest.issues.listComments({
+	await octokit.rest.issues.createComment({
 		...context.repo,
-		issue_number: PR_NUM
-	})
-	console.log(comments);
+		issue_number: PR_NUM,
+		body: `## Bundle Size Check
+
+${table.join('\n')}`,
+	});
+
+	// console.log(table.join('\n'));
+
+	// const { data: comments } = await github.rest.issues.listComments({
+	// 	...context.repo,
+	// 	issue_number: PR_NUM
+	// })
+	// console.log(comments);
 
 	return
 }
