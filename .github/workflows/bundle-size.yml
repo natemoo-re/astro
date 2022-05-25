@@ -2,8 +2,8 @@ name: Check Bundle Size
 
 on:
   pull_request:
-    paths:
-      - '/packages/astro/src/runtime/client/**/*.ts'
+    branches:
+      - 'main'
 
 # Automatically cancel in-progress actions on the same branch
 concurrency:
