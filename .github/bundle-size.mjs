@@ -20,7 +20,7 @@ export default async function checkBundleSize({ github, context, exec }) {
 
 	console.log(table.join('\n'));
 
-	const { data: comments } = await github.rest.issues.comments({
+	const { data: comments } = await github.rest.issues.listComments({
 		...context.repo,
 		issue_number: PR_NUM
 	})
