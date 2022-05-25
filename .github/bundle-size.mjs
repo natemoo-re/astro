@@ -3,6 +3,8 @@ export default async function checkBundleSize({ github, context }) {
 		...context.repo,
 		pull_number: context.payload.pull_request.number,
 	});
-	console.log({ files });
+	const modifiesClientRuntime = !!files.find(({ filename }) => filename.startsWith('packages/astro/src/runtime/client/'));
+	if (!modifiesClientRuntime) return;
+	console.log('Checking bundle size!');
 	return
 }
