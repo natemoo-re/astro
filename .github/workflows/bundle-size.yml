@@ -19,7 +19,11 @@ jobs:
     name: Check Bundle Size
     runs-on: ubuntu-latest
     steps: 
+      - name: Checkout Repo
+        uses: actions/checkout@v2
       - name: View context attributes
         uses: actions/github-script@v6
         with:
-          script: console.log(context)
+          script: |
+            const script = require('/.github/bundle-size.js')
+            await script({ github, context })
