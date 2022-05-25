@@ -1,0 +1,20 @@
+name: Check Bundle Size
+
+on:
+  pull_request:
+    paths:
+      - '/packages/astro/src/runtime/client/**/*.ts'
+
+# Automatically cancel in-progress actions on the same branch
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event_name == 'pull_request_target' && github.head_ref || github.ref }}
+  cancel-in-progress: true
+
+defaults:
+  run:
+    shell: bash
+
+- name: View context attributes
+  uses: actions/github-script@v6
+  with:
+    script: console.log(context)
