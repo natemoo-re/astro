@@ -25,5 +25,5 @@ jobs:
         uses: actions/github-script@v6
         with:
           script: |
-            const script = require('/.github/bundle-size.js')
+            const { default: script } = await import('${{ github.workspace }}/.github/bundle-size.mjs')
             await script({ github, context })
