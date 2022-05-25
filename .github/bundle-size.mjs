@@ -18,7 +18,7 @@ export default async function checkBundleSize({ github, context, exec }) {
 		table.push(`| ${filename.slice('.tmp/'.length)} | ${info.bytes} |`);
 	}
 
-	await octokit.rest.issues.createComment({
+	await github.rest.issues.createComment({
 		...context.repo,
 		issue_number: PR_NUM,
 		body: `## Bundle Size Check
