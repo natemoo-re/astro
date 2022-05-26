@@ -31,7 +31,8 @@ export default async function checkBundleSize({ github, context, exec }) {
 	];
 	const output = await bundle(clientRuntimeFiles);
 	
-	for (const [filename, { oldSize, newSize, sourceFile }] of Object.entries(output)) {
+	for (let [filename, { oldSize, newSize, sourceFile }] of Object.entries(output)) {
+		filename = filename !== 'hmr' ? `client:${filename}` : filename;
 		const prefix = (newSize - oldSize) > 0 ? '+' : '-';
 		const change = `${prefix}${formatBytes(newSize - oldSize)}`;
 		table.push(`| [\`${filename}\`](https://github.com/${context.repo.owner}/${context.repo.repo}/tree/${context.payload.pull_request.head.ref}/${sourceFile}) | ${formatBytes(oldSize)} | ${formatBytes(newSize)} | ${change} |`);
@@ -69,11 +70,11 @@ async function bundle(files) {
 	return Object.entries(metafile.outputs).reduce((acc, [filename, info]) => {
 		filename = filename.slice('out/'.length);
 		if (filename.startsWith('main/')) {
-			filename = filename.slice('main/'.length).replace(CLIENT_RUNTIME_PATH, 'client:').replace('.js', '');
+			filename = filename.slice('main/'.length).replace(CLIENT_RUNTIME_PATH, '').replace('.js', '');
 			const oldSize = info.bytes;
 			return Object.assign(acc, { [filename]: Object.assign(acc[filename] ?? {}, { oldSize }) });
 		}
-		filename = filename.replace(CLIENT_RUNTIME_PATH, 'client:').replace('.js', '');
+		filename = filename.replace(CLIENT_RUNTIME_PATH, '').replace('.js', '');
 		const newSize = info.bytes;
 		return Object.assign(acc, { [filename]: Object.assign(acc[filename] ?? {}, { newSize, sourceFile: Object.keys(info.inputs)[0] }) });
 	}, {});
