@@ -2,6 +2,8 @@ import { build } from 'esbuild';
 
 export default async function checkBundleSize({ github, context, exec }) {
 	const PR_NUM = context.payload.pull_request.number;
+	const SHA = context.payload.pull_request.head.sha;
+
 	console.log(context.payload);
 	const { data: files } = await github.rest.pulls.listFiles({
 		...context.repo,
@@ -24,25 +26,18 @@ export default async function checkBundleSize({ github, context, exec }) {
 		issue_number: PR_NUM
 	})
 
-	// const existingComment = comments.find(comment => {
-	// })
-	console.log(comments);
+	const comment = comments.find(comment => comment.user.login === 'github-actions[bot]' && comment.body.includes('Bundle Size Check'));
+	const method = comment ? 'updateComment' : 'createComment';
+	const payload = comment ? { comment_id: comment.id } : { issue_number: PR_NUM };
+	await github.rest.issues[method]({
+		...context.repo,
+		...payload,
+		body: `###  ⚠️  Bundle Size Check
 
+Latest commit: ${SHA}
 
-
-// 	await github.rest.issues.createComment({
-// 		...context.repo,
-// 		issue_number: PR_NUM,
-// 		body: `###  ⚠️  Bundle Size Check
-
-// Latest commit: \`COMMIT\`
-
-// ${table.join('\n')}`,
-// 	});
-
-	// console.log(table.join('\n'));
-
-	return
+${table.join('\n')}`,
+	});
 }
 
 async function bundle(files) {
