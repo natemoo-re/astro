@@ -22,12 +22,6 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@v2
 
-      - name: Checkout Main into tmp
-        uses: actions/checkout@v2
-        with:
-          ref: main
-          path: main
-
       - name: Setup PNPM
         uses: pnpm/action-setup@v2.2.1
 
