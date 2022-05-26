@@ -9,7 +9,6 @@ export default async function checkFirstContribution({ github, context }) {
 	const issues = await github.paginate(opts)
 
 	for (const issue of issues) {
-		console.log(issue);
 		if (issue.number === context.issue.number) {
 			continue
 		}
@@ -19,12 +18,17 @@ export default async function checkFirstContribution({ github, context }) {
 		}
 	}
 
+	const { data: comments } = await github.rest.issues.listComments({
+		...context.repo,
+		issue_number: context.payload.pull_request.number
+	})
+	const comment = comments.find(comment => comment.user.login === 'github-actions[bot]' && comment.body.includes('Welcome to Astro!'));
+	if (comment) return // We've already commented on this PR.
+
 	await github.rest.issues.createComment({
 		issue_number: context.issue.number,
 		owner: context.repo.owner,
 		repo: context.repo.repo,
-		body: `**Welcome** to Astro!
-
-Please make sure you're read our [contributing guide](CONTRIBUTING.md) and we look forward to reviewing your Pull request shortly ✨`
+		body: `**Welcome to Astro!** Congratulations on opening your first Pull Request.`
 	})
 }
