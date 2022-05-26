@@ -1,5 +1,3 @@
-console.log("Testing!")
-
 if (import.meta.hot) {
 	import.meta.hot.accept((mod) => mod);
 	const parser = new DOMParser();
