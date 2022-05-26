@@ -14,7 +14,7 @@ function formatBytes(bytes, decimals = 2) {
     return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
 }
 
-export default async function checkBundleSize({ github, context, exec }) {
+export default async function checkBundleSize({ github, context }) {
 	const PR_NUM = context.payload.pull_request.number;
 	const SHA = context.payload.pull_request.head.sha;
 
