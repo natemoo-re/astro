@@ -19,9 +19,9 @@ export default async function checkBundleSize({ github, context, exec }) {
 	];
 	const output = await bundle(clientRuntimeFiles);
 	
-	for (const [filename, { oldSize, newSize }] of Object.entries(output)) {
+	for (const [filename, { oldSize, newSize, sourceFile }] of Object.entries(output)) {
 		const change = newSize - oldSize;
-		table.push(`| [\`${filename}\`](https://github.com/${context.repo.owner}/${context.repo.repo}/tree/${context.payload.pull_request.head.ref}/${Object.keys(info.inputs)[0]}) | ${oldSize} | ${newSize} | ${change} |`);
+		table.push(`| [\`${filename}\`](https://github.com/${context.repo.owner}/${context.repo.repo}/tree/${context.payload.pull_request.head.ref}/${sourceFile}) | ${oldSize} | ${newSize} | ${change} |`);
 	}
 
 	const { data: comments } = await github.rest.issues.listComments({
@@ -61,6 +61,6 @@ async function bundle(files) {
 			return Object.assign(acc, { [filename]: Object.assign(acc[filename] ?? {}, { oldSize }) });
 		}
 		const newSize = info.bytes;
-		return Object.assign(acc, { [filename]: Object.assign(acc[filename] ?? {}, { newSize }) });
+		return Object.assign(acc, { [filename]: Object.assign(acc[filename] ?? {}, { newSize, sourceFile: Object.values(info.inputs)[0] }) });
 	}, {});
 }
