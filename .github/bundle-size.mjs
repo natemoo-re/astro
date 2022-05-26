@@ -13,11 +13,11 @@ export default async function checkBundleSize({ github, context, exec }) {
 	const clientRuntimeFiles = files.filter(({ filename }) => filename.startsWith(CLIENT_RUNTIME_PATH));
 	if (clientRuntimeFiles.length === 0) return;
 
-	const { data: mainClientRuntimeFiles } = await github.rest.repos.getContent({
+	const res = await github.rest.repos.getContent({
 		...context.repo,
 		path: CLIENT_RUNTIME_PATH,
 	});
-	console.log({ mainClientRuntimeFiles });
+	console.log(res);
 	
 	const table = [
 		'| File | Old Size | New Size | Change |',
