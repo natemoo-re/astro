@@ -1,6 +1,7 @@
 export default async function checkFirstContribution({ github, context }) {
 	// Get a list of all issues created by the PR opener
 	// See: https://octokit.github.io/rest.js/#pagination
+	console.log(context.payload.sender.login)
 	const creator = context.payload.sender.login
 	const opts = github.rest.issues.listForRepo.endpoint.merge({
 		...context.issue,
