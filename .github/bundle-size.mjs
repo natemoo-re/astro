@@ -57,9 +57,11 @@ async function bundle(files) {
 		filename = filename.slice('out/'.length);
 		if (filename.startsWith('main')) {
 			filename = filename.slice('main/');
+			console.log({ filename });
 			const oldSize = info.bytes;
 			return Object.assign(acc, { [filename]: Object.assign(acc[filename] ?? {}, { oldSize }) });
 		}
+		console.log({ filename });
 		const newSize = info.bytes;
 		return Object.assign(acc, { [filename]: Object.assign(acc[filename] ?? {}, { newSize, sourceFile: Object.values(info.inputs)[0] }) });
 	}, {});
