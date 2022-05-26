@@ -62,7 +62,7 @@ async function bundle(files) {
 		bundle: true,
 		minify: true,
 		sourcemap: false,
-		target: ['chrome58', 'firefox57', 'safari11', 'edge16'],
+		target: ['es2018'],
 		outdir: 'out',
 		metafile: true,
 	})
