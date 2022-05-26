@@ -1,5 +1,7 @@
 import { build } from 'esbuild';
 
+const CLIENT_RUNTIME_PATH = 'packages/astro/src/runtime/client/';
+
 function formatBytes(bytes, decimals = 2) {
     if (bytes === 0) return '0 B';
 
@@ -15,7 +17,6 @@ function formatBytes(bytes, decimals = 2) {
 export default async function checkBundleSize({ github, context, exec }) {
 	const PR_NUM = context.payload.pull_request.number;
 	const SHA = context.payload.pull_request.head.sha;
-	const CLIENT_RUNTIME_PATH = 'packages/astro/src/runtime/client/';
 
 	const { data: files } = await github.rest.pulls.listFiles({
 		...context.repo,
