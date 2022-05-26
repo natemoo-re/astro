@@ -32,7 +32,7 @@ export default async function checkBundleSize({ github, context, exec }) {
 	await github.rest.issues[method]({
 		...context.repo,
 		...payload,
-		body: `###  ⚠️  Bundle Size Check
+		body: `###  ⚖️  Bundle Size Check
 
 Latest commit: ${SHA}
 
