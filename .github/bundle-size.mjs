@@ -56,12 +56,11 @@ async function bundle(files) {
 	return Object.entries(metafile.outputs).reduce((acc, [filename, info]) => {
 		filename = filename.slice('out/'.length);
 		if (filename.startsWith('main/')) {
-			filename = filename.slice('main/'.length);
-			console.log({ filename });
+			filename = filename.slice('main/'.length).replace(CLIENT_RUNTIME_PATH, '');
 			const oldSize = info.bytes;
 			return Object.assign(acc, { [filename]: Object.assign(acc[filename] ?? {}, { oldSize }) });
 		}
-		console.log({ filename });
+		filename = filename.replace(CLIENT_RUNTIME_PATH, '');
 		const newSize = info.bytes;
 		return Object.assign(acc, { [filename]: Object.assign(acc[filename] ?? {}, { newSize, sourceFile: Object.values(info.inputs)[0] }) });
 	}, {});
