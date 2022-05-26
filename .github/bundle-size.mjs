@@ -76,6 +76,6 @@ async function bundle(files) {
 		}
 		filename = filename.replace(CLIENT_RUNTIME_PATH, '').replace('.js', '');
 		const newSize = info.bytes;
-		return Object.assign(acc, { [filename]: Object.assign(acc[filename] ?? {}, { newSize, sourceFile: Object.keys(info.inputs)[0] }) });
+		return Object.assign(acc, { [filename]: Object.assign(acc[filename] ?? {}, { newSize, sourceFile: Object.keys(info.inputs).find(src => src.endsWith('.ts')) }) });
 	}, {});
 }
