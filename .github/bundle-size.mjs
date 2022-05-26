@@ -12,21 +12,16 @@ export default async function checkBundleSize({ github, context, exec }) {
 	});
 	const clientRuntimeFiles = files.filter(({ filename }) => filename.startsWith(CLIENT_RUNTIME_PATH));
 	if (clientRuntimeFiles.length === 0) return;
-
-	const res = await github.rest.repos.getContent({
-		...context.repo,
-		path: CLIENT_RUNTIME_PATH,
-	});
-	console.log(res);
 	
 	const table = [
 		'| File | Old Size | New Size | Change |',
 		'| ---- | -------- | -------- | ------ |',
 	];
 	const output = await bundle(clientRuntimeFiles);
-
-	for (const [filename, info] of Object.entries(output)) {
-		table.push(`| [\`${filename.slice('.tmp/'.length)}\`](https://github.com/${context.repo.owner}/${context.repo.repo}/tree/${context.payload.pull_request.head.ref}/${Object.keys(info.inputs)[0]}) | ${info.bytes} | ... | ... |`);
+	
+	for (const [filename, { oldSize, newSize }] of Object.entries(output)) {
+		const change = newSize - oldSize;
+		table.push(`| [\`${filename}\`](https://github.com/${context.repo.owner}/${context.repo.repo}/tree/${context.payload.pull_request.head.ref}/${Object.keys(info.inputs)[0]}) | ${oldSize} | ${newSize} | ${change} |`);
 	}
 
 	const { data: comments } = await github.rest.issues.listComments({
@@ -49,14 +44,23 @@ ${table.join('\n')}`,
 
 async function bundle(files) {
 	const { metafile } = await build({
-		entryPoints: [files.map(({ filename }) => filename)],
+		entryPoints: [files.map(({ filename }) => filename), files.map(({ filename }) => `main/${filename}`)],
 		bundle: true,
 		minify: true,
 		sourcemap: false,
 		target: ['chrome58', 'firefox57', 'safari11', 'edge16'],
-		outdir: '.tmp/',
+		outdir: 'out',
 		metafile: true,
 	})
 
-	return metafile.outputs;
+	return Object.entries(metafile.outputs).reduce((acc, [filename, info]) => {
+		filename = filename.slice('out/'.length);
+		if (filename.startsWith('main')) {
+			filename = filename.slice('main/');
+			const oldSize = info.bytes;
+			return Object.assign(acc, { [filename]: Object.assign(acc[filename] ?? {}, { oldSize }) });
+		}
+		const newSize = info.bytes;
+		return Object.assign(acc, { [filename]: Object.assign(acc[filename] ?? {}, { newSize }) });
+	}, {});
 }
