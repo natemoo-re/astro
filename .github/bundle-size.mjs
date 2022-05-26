@@ -4,13 +4,20 @@ import { build } from 'esbuild';
 export default async function checkBundleSize({ github, context, exec }) {
 	const PR_NUM = context.payload.pull_request.number;
 	const SHA = context.payload.pull_request.head.sha;
+	const CLIENT_RUNTIME_PATH = 'packages/astro/src/runtime/client/';
 
 	const { data: files } = await github.rest.pulls.listFiles({
 		...context.repo,
 		pull_number: PR_NUM,
 	});
-	const clientRuntimeFiles = files.filter(({ filename }) => filename.startsWith('packages/astro/src/runtime/client/'));
+	const clientRuntimeFiles = files.filter(({ filename }) => filename.startsWith(CLIENT_RUNTIME_PATH));
 	if (clientRuntimeFiles.length === 0) return;
+
+	const { data: mainClientRuntimeFiles } = await github.rest.repos.getContent({
+		...context.repo,
+		path: CLIENT_RUNTIME_PATH,
+	});
+	console.log({ mainClientRuntimeFiles });
 	
 	const table = [
 		'| File | Old Size | New Size | Change |',
