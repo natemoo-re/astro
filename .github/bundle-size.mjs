@@ -58,7 +58,7 @@ ${table.join('\n')}`,
 
 async function bundle(files) {
 	const { metafile } = await build({
-		entryPoints: [files.map(({ filename }) => filename), files.map(({ filename }) => `main/${filename}`)],
+		entryPoints: [...files.map(({ filename }) => filename), ...files.map(({ filename }) => `main/${filename}`)],
 		bundle: true,
 		minify: true,
 		sourcemap: false,
