@@ -55,8 +55,8 @@ async function bundle(files) {
 
 	return Object.entries(metafile.outputs).reduce((acc, [filename, info]) => {
 		filename = filename.slice('out/'.length);
-		if (filename.startsWith('main')) {
-			filename = filename.slice('main/');
+		if (filename.startsWith('main/')) {
+			filename = filename.slice('main/'.length);
 			console.log({ filename });
 			const oldSize = info.bytes;
 			return Object.assign(acc, { [filename]: Object.assign(acc[filename] ?? {}, { oldSize }) });
