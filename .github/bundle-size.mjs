@@ -1,5 +1,16 @@
-import fs from 'node:fs/promises';
 import { build } from 'esbuild';
+
+function formatBytes(bytes, decimals = 2) {
+    if (bytes === 0) return '0 B';
+
+    const k = 1024;
+    const dm = decimals < 0 ? 0 : decimals;
+    const sizes = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+}
 
 export default async function checkBundleSize({ github, context, exec }) {
 	const PR_NUM = context.payload.pull_request.number;
@@ -20,8 +31,9 @@ export default async function checkBundleSize({ github, context, exec }) {
 	const output = await bundle(clientRuntimeFiles);
 	
 	for (const [filename, { oldSize, newSize, sourceFile }] of Object.entries(output)) {
-		const change = newSize - oldSize;
-		table.push(`| [\`${filename}\`](https://github.com/${context.repo.owner}/${context.repo.repo}/tree/${context.payload.pull_request.head.ref}/${sourceFile}) | ${oldSize} | ${newSize} | ${change} |`);
+		const prefix = (newSize - oldSize) > 0 ? '+' : '-';
+		const change = `${prefix}${formatBytes(newSize - oldSize)}`;
+		table.push(`| [\`${filename}\`](https://github.com/${context.repo.owner}/${context.repo.repo}/tree/${context.payload.pull_request.head.ref}/${sourceFile}) | ${formatBytes(oldSize)} | ${formatBytes(newSize)} | ${change} |`);
 	}
 
 	const { data: comments } = await github.rest.issues.listComments({
