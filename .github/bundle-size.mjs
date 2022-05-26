@@ -62,6 +62,6 @@ async function bundle(files) {
 		}
 		filename = filename.replace(CLIENT_RUNTIME_PATH, '');
 		const newSize = info.bytes;
-		return Object.assign(acc, { [filename]: Object.assign(acc[filename] ?? {}, { newSize, sourceFile: Object.values(info.inputs)[0] }) });
+		return Object.assign(acc, { [filename]: Object.assign(acc[filename] ?? {}, { newSize, sourceFile: Object.keys(info.inputs)[0] }) });
 	}, {});
 }
