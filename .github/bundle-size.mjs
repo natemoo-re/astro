@@ -1,10 +1,10 @@
+import fs from 'node:fs/promises';
 import { build } from 'esbuild';
 
 export default async function checkBundleSize({ github, context, exec }) {
 	const PR_NUM = context.payload.pull_request.number;
 	const SHA = context.payload.pull_request.head.sha;
 
-	console.log(context.payload);
 	const { data: files } = await github.rest.pulls.listFiles({
 		...context.repo,
 		pull_number: PR_NUM,
@@ -13,19 +13,19 @@ export default async function checkBundleSize({ github, context, exec }) {
 	if (clientRuntimeFiles.length === 0) return;
 	
 	const table = [
-		'| File | Size |',
-		'| ---- | ---- |',
+		'| File | Old Size | New Size | Change |',
+		'| ---- | -------- | -------- | ------ |',
 	];
 	const output = await bundle(clientRuntimeFiles);
+
 	for (const [filename, info] of Object.entries(output)) {
-		table.push(`| ${filename.slice('.tmp/'.length)} | ${info.bytes} |`);
+		table.push(`| [\`${filename.slice('.tmp/'.length)}\`](https://github.com/${context.repo.owner}/${context.repo.repo}/tree/${context.payload.pull_request.head.ref}/${Object.keys(info.inputs)[0]}) | ${info.bytes} | ... | ... |`);
 	}
 
 	const { data: comments } = await github.rest.issues.listComments({
 		...context.repo,
 		issue_number: PR_NUM
 	})
-
 	const comment = comments.find(comment => comment.user.login === 'github-actions[bot]' && comment.body.includes('Bundle Size Check'));
 	const method = comment ? 'updateComment' : 'createComment';
 	const payload = comment ? { comment_id: comment.id } : { issue_number: PR_NUM };
