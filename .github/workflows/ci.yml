@@ -27,6 +27,8 @@ jobs:
     steps:
       - name: Debug
         run: |
+          echo "concurrency: ${{ github.workflow }}-${{ github.event_name == 'pull_request_target' && github.head_ref || github.ref }}"
+          echo "if main job_id: ${{ github.ref == 'refs/heads/main' && github.job_id }}"
           echo "workflow: ${{ github.workflow }}"
           echo "ref: ${{ github.ref }}"
           echo "event_name: ${{ github.event_name }}"
