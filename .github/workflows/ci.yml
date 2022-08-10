@@ -26,5 +26,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Debug
-        run: |
-          echo "concurrency: ${{ github.workflow }}-${{ github.ref == 'refs/heads/main' && github.run_id || '' }}-${{ github.event_name == 'pull_request_target' && github.head_ref || github.ref }}"
+        run: echo ${{ toJson(github) }}
