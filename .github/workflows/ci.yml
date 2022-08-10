@@ -26,4 +26,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Debug
-        run: echo ${{ github }}
+        run: |
+          echo "workflow: ${{ github.workflow }}"
+          echo "ref: ${{ github.ref }}"
+          echo "event_name: ${{ github.event_name }}"
+          echo "head_ref: ${{ github.head_ref }}"
