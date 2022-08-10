@@ -26,4 +26,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Debug
-        run: env
+        run: echo ${{ github }}
