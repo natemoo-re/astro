@@ -25,6 +25,10 @@ export interface DevServer {
  */
 export default async function dev(inlineConfig: AstroInlineConfig): Promise<DevServer> {
 	const devStart = performance.now();
+	await telemetry.notify(async () => {
+		console.log('Notify me');
+		return true;
+	})
 	await telemetry.record([]);
 
 	// Create a container which sets up the Vite server.

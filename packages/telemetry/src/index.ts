@@ -102,7 +102,13 @@ export class AstroTelemetry {
 		// Don't bother them about it again.
 		// In the event of significant changes, we should invalidate old dates.
 		if (this.notifyDate) {
-			return;
+			const sixtyDays = 5_184_000_000;
+			const now = Date.now()
+			const notifiedAt = new Date(Number.parseInt(this.notifyDate)).valueOf();
+			const diff = now - notifiedAt; 
+			if (diff < sixtyDays) {
+				return;
+			}
 		}
 		const enabled = await callback();
 		this.config.set(KEY.TELEMETRY_NOTIFY_DATE, Date.now().toString());
