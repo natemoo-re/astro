@@ -18,11 +18,12 @@ jobs:
           issue_number:  ${{ github.event.number }}
         with:
           script: |
-            const { data: reviews } = await github.rest.pulls.listReviewComments({
+            const { data: reviews } = await github.rest.pulls.listReviews({
               owner: context.repo.owner,
               repo: context.repo.repo,
               pull_number: process.env.issue_number,
             });
+            console.log(reviews);
             for (const review of reviews) {
               if (review.user.id === 41898282 && review.state === 'CHANGES_REQUESTED') {
                 return 'block';
