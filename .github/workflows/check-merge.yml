@@ -15,7 +15,7 @@ jobs:
         id: set-blocks
         uses: actions/github-script@v6
         env:
-          issue_number: context.issue.number
+          issue_number:  ${{ github.event.number }}
         with:
           script: |
             const reviews = await github.rest.pulls.listReviewComments({
