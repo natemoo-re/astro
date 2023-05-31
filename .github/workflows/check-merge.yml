@@ -72,7 +72,7 @@ jobs:
             This PR is blocked because it contains a `minor` changeset. A reviewer will merge this at the next release if approved.
           edit-mode: replace
       
-      - name: Change PR Status
+      - name: Add label
         uses: actions/github-script@v6
         if: steps.find-blockers.outputs.found == 'true'
         env:
@@ -86,11 +86,18 @@ jobs:
               labels: ['semver minor']
             });
 
+      - name: Change PR Status
+        uses: actions/github-script@v6
+        if: steps.find-blockers.outputs.found == 'true'
+        env:
+          issue_number: ${{ github.event.number }}
+        with:
+          script: |
             github.rest.pulls.submitReview({
               owner: context.repo.owner,
               repo: context.repo.repo,
               pull_number: process.env.issue_number,
               event: 'REQUEST_CHANGES',
-              body: ''
+              body: 'Test'
             });
 
