@@ -1,5 +1,7 @@
 # Style Guide
 
+<!-- Boo! -->
+
 Welcome to the Astro style guide. This document is meant to guide you on the coding & writing styles of all content within the Astro repo, including:
 
 - TypeScript & JavaScript coding style
