@@ -17,7 +17,7 @@ env:
 jobs:
   snapshot-release:
     name: Create a snapshot release of a pull request
-    if: ${{ github.repository_owner == 'withastro' && github.event.issue.pull_request && startsWith(github.event.comment.body, '!preview') }}
+    if: ${{ github.repository_owner == 'lilnasy' && github.event.issue.pull_request && startsWith(github.event.comment.body, '!preview') }}
     runs-on: ubuntu-latest
     permissions: 
       contents: read 
